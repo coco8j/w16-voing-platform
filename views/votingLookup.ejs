@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <div>
+      <div>
+        <div>
+          제안자: <%= vote._id %>
+        </div>
+        <time>
+          마감: <%= vote.dueDate %>
+        </time>
+        <div>
+          진행현황: <%= vote.isOnGoing ? "진행중" : "마감" %>
+        </div>
+      </div>
+      <% if (!vote.isOnGoing || isProposer) { %>
+        <div>
+          <div>투표결과</div>
+          <% voteResults.forEach((result, index) => { %>
+            <div>
+              <%= index + 1%>위 <%= result.title %>
+            </div>
+            <div>
+              <%= result.voteCounts %> 표
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (vote.isOnGoing) { %>
+        <form
+        action="/votings/<%= vote._id%>"
+        method="post"
+        >
+          <% vote.options.forEach((option) => { %>
+            <input
+            type="radio"
+            name="optionId"
+            value="<%= option.title%>"
+            >
+            <%= option.title %>
+          </input>
+          <% }); %>
+          <button class="voting-button">
+            투표하기
+          </button>
+        </form>
+      <% } %>
+      <% if (isProposer) { %>
+      <button class="delete-button">
+        삭제하기
+      </button>
+      <% } %>
+      <button class="goBack-button">
+        돌아가기
+      </button>
+    </div>
+    <script>
+      const deleteButton = document.querySelector(".delete-button");
+      if (deleteButton) {
+        deleteButton.addEventListener("click", async function () {
+          const req = new Request(`${location.pathname}`, { method: "DELETE" })
+          const answer = await fetch(req);
+
+          location.href = "/";
+        });
+      }
+
+      const goBackButton = document.querySelector(".goBack-button");
+      goBackButton.addEventListener("click", function () {
+        location.href = "/";
+      });
+    </script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Voting Platform</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>새 투표 만들기</h1>
+    <p>Welcome to 새 투표 만들기</p>
+    <div
+    class="form-container"
+    >
+      <form
+      action="/votings/new"
+      method="post"
+      >
+        <input
+        name="title"
+        placeholder="투표 제목"
+        required
+        >
+        <input
+        type="datetime-local"
+        name="dueDate"
+        required
+        >
+        <input
+        name="option1"
+        placeholder="옵션1 반드시 작성해주세요."
+        required
+        >
+        <input
+        name="extraOptions"
+        placeholder="옵션2, 옵션3, 옵션4, 옵션5 ..."
+        required
+        >
+        <button
+        class="create-vote-button"
+        >
+          생성하기
+        </button>
+      </form>
+      <div>
+        <%= message %>
+      </div>
+      <button
+      class="goBack-button"
+      >
+        돌아가기
+      </button>
+    </div>
+    <script>
+      const createVoteButton = document.querySelector(".create-vote-button");
+      createVoteButton.addEventListener("click", function() {
+        location.href = "/votings/new";
+      });
+
+      const goBackButton = document.querySelector(".goBack-button");
+      goBackButton.addEventListener("click", function() {
+        location.href = "/";
+      });
+    </script>
+  </body>
+</html>

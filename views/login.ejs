@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>
+      <%= title %>
+    </h1>
+    <p>
+      Welcome to <%= title %>
+    </p>
+    <div>
+      <form
+      class="login-form"
+      action="/login"
+      method="post"
+      >
+        <input
+        type="email"
+        name="email"
+        class="input-email"
+        placeholder="이메일"
+        required
+        >
+        <input
+        type="password"
+        name="password"
+        class="input-password"
+        placeholder="비밀번호"
+        required
+        >
+        <input
+        type="password"
+        name="passwordConfirm"
+        placeholder="비밀번호 확인"
+        required
+        >
+        <button class="login-button">
+          로그인
+        </button>
+      </form>
+      <button class="signup-button">
+        회원가입
+      </button>
+    </div>
+  </body>
+  <script>
+    const signupButton = document.querySelector(".signup-button");
+    signupButton.addEventListener("click", function() {
+      location.href = "/signup";
+    });
+  </script>
+</html>

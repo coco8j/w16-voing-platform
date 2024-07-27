@@ -1,0 +1,114 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #14261A;
+  color: #A6BF80;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  color: #A6BF80;
+  margin-top: 20px;
+}
+
+p {
+  color: #A6BF80;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #648C79;
+  color: #FFF;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #A6BF80;
+}
+
+button:active {
+  background-color: #736156;
+}
+
+.create-vote-button, .my-vote-button, .logout-button {
+  margin-top: 10px;
+}
+
+nav {
+  background-color: #648C79;
+  color: #F2F0D5;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+nav a {
+  color: #FBDB94;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav time {
+  font-size: 14px;
+  color: #EDEDED;
+}
+
+nav div {
+  margin: 5px 0;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.message-container {
+  background-color: #648C79;
+  color: #FFF;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 50px;
+  width: 80%;
+}
+
+.message-container h1 {
+  margin: 0 0 20px;
+}
+
+.goBack-button {
+  background-color: #A6BF80;
+  color: #14261A;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.goBack-button:hover {
+  background-color: #736156;
+}
+
+.goBack-button:active {
+  background-color: #648C79;
+}

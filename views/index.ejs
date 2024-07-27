@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Voting Platform</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>
+      <%= title %>
+    </h1>
+    <p>
+      Welcome to <%= title %>
+    </p>
+    <button class="create-vote-button">
+      생성하기
+    </button>
+    <button class="my-vote-button">
+      내 투표
+    </button>
+    <% if (hasLogin) { %>
+    <button class="logout-button">
+      로그아웃
+    </button>
+    <% } %>
+    <% votes.forEach((vote) => { %>
+      <div>
+        <nav>
+          <div>
+            <a href="/votings/<%= vote._id %>">
+              <%= vote.title %>
+            </a>
+          </div>
+          <time>
+            마감: <%= vote.dueDate %>
+          </time>
+          <div>
+            진행현황: <%= vote.isOnGoing ? "진행중" : "마감" %>
+          </div>
+        </nav>
+      </div>
+    <% }); %>
+    <script>
+      const createVoteButton = document.querySelector(".create-vote-button");
+      createVoteButton.addEventListener("click", function() {
+        location.href = "/votings/new";
+      });
+
+      const myVoteButton = document.querySelector(".my-vote-button");
+      myVoteButton.addEventListener("click", function() {
+        location.href = "/my-votings";
+      });
+
+      const logoutButton = document.querySelector(".logout-button");
+      if (logoutButton) {
+        logoutButton.addEventListener("click", function() {
+          location.href = "/logout";
+        });
+      }
+    </script>
+  </body>
+</html>

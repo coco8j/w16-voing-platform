@@ -1,0 +1,19 @@
+<head>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+<body>
+  <div class="message-container">
+    <h1>
+      <%= message %>
+    </h1>
+    <button class="goBack-button">
+      돌아가기
+    </button>
+    <script>
+      const goBackButton = document.querySelector(".goBack-button");
+      goBackButton.addEventListener("click", function () {
+        location.href = "/";
+      });
+    </script>
+  </div>
+</body>

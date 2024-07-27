@@ -1,61 +1,94 @@
+require("dotenv").config();
+require("./config/db");
+
 const express = require("express");
+const passport = require("passport");
+const path = require("path");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const createError = require("http-errors");
+
+const indexRouter = require("./routes")
+
 const app = express();
-const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.type('html').send(html));
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+  name: "session-id",
+  cookie: { httpOnly: true },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-server.keepAliveTimeout = 120 * 1000;
-server.headersTimeout = 120 * 1000;
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("./models/User");
+const bcrypt = require("bcrypt");
 
-const html = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello from Render!</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          disableForReducedMotion: true
-        });
-      }, 500);
-    </script>
-    <style>
-      @import url("https://p.typekit.net/p.css?s=1&k=vnd5zic&ht=tk&f=39475.39476.39477.39478.39479.39480.39481.39482&a=18673890&app=typekit&e=css");
-      @font-face {
-        font-family: "neo-sans";
-        src: url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
-        font-style: normal;
-        font-weight: 700;
+passport.use(new LocalStrategy({
+  usernameField: "email",
+},
+  async function (email, password, done) {
+    try {
+      const user = await User.findOne({ email: email });
+
+      if (!user) {
+        done(null, false, { message: "잘못된 아이디 입니다." });
+        return;
       }
-      html {
-        font-family: neo-sans;
-        font-weight: 700;
-        font-size: calc(62rem / 16);
+
+      const passwordVerification = await bcrypt.compare(password, user.password);
+
+      if (!passwordVerification) {
+        done(null, false, { message: "잘못된 비밀번호 입니다." });
+        return;
       }
-      body {
-        background: white;
-      }
-      section {
-        border-radius: 1em;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-      }
-    </style>
-  </head>
-  <body>
-    <section>
-      Hello from Render!
-    </section>
-  </body>
-</html>
-`
+
+      done(null, user);
+      return;
+    } catch (error) {
+      done(error);
+      return;
+    }
+  }
+));
+
+passport.serializeUser(function (user, done) {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async function (userId, done) {
+  try {
+    const user = await User.findById(userId);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/", indexRouter);
+
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+app.use(function (error, req, res, next) {
+  res.locals.message = error.message;
+  res.locals.error = req.app.get("env") === "development" ? error : {};
+
+  res.status(error.status || 500);
+  res.render("error");
+});
+
+module.exports = app;

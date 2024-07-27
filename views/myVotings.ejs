@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to My Votings</p>
+    <div>
+    <% votes.forEach((vote) => { %>
+        <nav>
+          <div>
+            <a href="/votings/<%= vote._id %>">
+            <%= vote.title %>
+          </a>
+          </div>
+          <time>
+            마감: <%= vote.dueDate %>
+          </time>
+          <div>
+            진행현황: <%= vote.isOnGoing ? "진행중" : "마감" %>
+          </div>
+        </nav>
+        <% }); %>
+      </div>
+  </body>
+</html>
